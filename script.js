@@ -49,9 +49,9 @@ function createVertex(x, y) {
 
 // Function to delete a vertex based on click position
 function deleteVertex(x, y) {
-    const vertex = document.elementFromPoint(x, y);
-    if (vertex && vertex.classList.contains('vertex')) {
-        vertex.remove();
+    const element = document.elementFromPoint(event.clientX, event.clientY);
+    if (element && element.classList.contains('vertex')) {
+        canvas.removeChild(element);
     }
 }
 
@@ -64,6 +64,7 @@ function makeDraggable(element) {
         isDragging = true;
         offsetX = event.offsetX;
         offsetY = event.offsetY;
+        document.body.style.cursor = 'grabbing';
     });
 
     document.addEventListener('mousemove', (event) => {
@@ -78,5 +79,6 @@ function makeDraggable(element) {
 
     document.addEventListener('mouseup', () => {
         isDragging = false;
+        document.body.style.cursor = 'default';
     });
 }
