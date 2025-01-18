@@ -1,0 +1,23 @@
+/* styles.css */
+
+/* Set the cream background and ensure the body takes full height */
+body {
+    margin: 0; /* Remove default margins */
+    padding: 0;
+    background-color: #f5f5dc; /* Cream color */
+    color: #333; /* Dark text for good contrast */
+    font-family: Arial, sans-serif; /* Set a clean font */
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    min-height: 100vh; /* Ensure body fills the viewport height */
+    text-align: center; /* Center text */
+}
+
+h1 {
+    font-size: 2.5rem; /* Responsive heading size */
+}
+
+p {
+    font-size: 1.2rem; /* Slightly larger paragraph text */
+}
