@@ -56,10 +56,10 @@ function createVertex(x, y) {
 
     const vertex = document.createElement('div');
     vertex.className = 'vertex';
-    vertex.style.left = `${x - 15}px`; // Center the vertex
-    vertex.style.top = `${y - 15}px`; // Center the vertex
+    vertex.style.left = `${x - 20}px`; // Center the vertex
+    vertex.style.top = `${y - 20}px`; // Center the vertex
     vertex.dataset.id = vertexCount; // Store an ID for deletion
-    vertex.innerHTML = `v<sub>${vertexCount}</sub>`; // Add subscript label
+    vertex.textContent = `v${formatSubscript(vertexCount)}`; // Add subscript label
     vertices.push(vertex); // Add to the vertex array
     canvas.appendChild(vertex);
 
@@ -84,9 +84,18 @@ function deleteVertex(clientX, clientY) {
 function updateVertexLabels() {
     vertices.forEach((vertex, index) => {
         vertex.dataset.id = index + 1; // Update ID
-        vertex.innerHTML = `v<sub>${index + 1}</sub>`; // Update label
+        vertex.textContent = `v${formatSubscript(index + 1)}`; // Update label
     });
     vertexCount = vertices.length; // Update vertex count
+}
+
+// Function to format subscripts using Unicode
+function formatSubscript(number) {
+    const subscriptMap = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'];
+    return String(number)
+        .split('')
+        .map((digit) => subscriptMap[digit])
+        .join('');
 }
 
 // Function to make an element draggable
