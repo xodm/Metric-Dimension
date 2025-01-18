@@ -21,3 +21,48 @@ h1 {
 p {
     font-size: 1.2rem; /* Slightly larger paragraph text */
 }
+
+/* styles.css */
+
+/* General reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+/* Toolbar styling */
+#toolbar {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    gap: 10px;
+}
+
+/* Canvas area */
+#canvas {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 50px); /* Subtract toolbar height */
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+/* Vertex styling */
+.vertex {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 2px solid black;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
