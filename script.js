@@ -2,6 +2,7 @@
 
 let mode = null; // Current mode: 'add' or 'delete'
 let vertexCount = 0; // Counter for labeling vertices
+const vertices = []; // Array to store all vertices
 
 // Reference DOM elements
 const canvas = document.getElementById('canvas');
@@ -57,8 +58,9 @@ function createVertex(x, y) {
     vertex.className = 'vertex';
     vertex.style.left = `${x - 15}px`; // Center the vertex
     vertex.style.top = `${y - 15}px`; // Center the vertex
-    vertex.textContent = `v_${vertexCount}`;
     vertex.dataset.id = vertexCount; // Store an ID for deletion
+    vertex.innerHTML = `v<sub>${vertexCount}</sub>`; // Add subscript label
+    vertices.push(vertex); // Add to the vertex array
     canvas.appendChild(vertex);
 
     // Make vertex draggable
@@ -69,8 +71,22 @@ function createVertex(x, y) {
 function deleteVertex(clientX, clientY) {
     const element = document.elementFromPoint(clientX, clientY);
     if (element && element.classList.contains('vertex')) {
-        canvas.removeChild(element);
+        const index = vertices.indexOf(element);
+        if (index > -1) {
+            vertices.splice(index, 1); // Remove from array
+            canvas.removeChild(element); // Remove from DOM
+            updateVertexLabels(); // Update all labels
+        }
     }
+}
+
+// Function to update all vertex labels
+function updateVertexLabels() {
+    vertices.forEach((vertex, index) => {
+        vertex.dataset.id = index + 1; // Update ID
+        vertex.innerHTML = `v<sub>${index + 1}</sub>`; // Update label
+    });
+    vertexCount = vertices.length; // Update vertex count
 }
 
 // Function to make an element draggable
