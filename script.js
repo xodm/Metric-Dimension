@@ -8,14 +8,32 @@ const canvas = document.getElementById('canvas');
 const addVertexButton = document.getElementById('add-vertex');
 const deleteVertexButton = document.getElementById('delete-vertex');
 
+// Function to handle button toggling
+function setMode(newMode) {
+    mode = newMode;
+
+    // Update button styles to reflect active mode
+    if (mode === 'add') {
+        addVertexButton.classList.add('active');
+        deleteVertexButton.classList.remove('active');
+        canvas.style.cursor = 'crosshair';
+    } else if (mode === 'delete') {
+        addVertexButton.classList.remove('active');
+        deleteVertexButton.classList.add('active');
+        canvas.style.cursor = 'not-allowed';
+    } else {
+        addVertexButton.classList.remove('active');
+        deleteVertexButton.classList.remove('active');
+        canvas.style.cursor = 'default';
+    }
+}
+
 // Set modes based on button clicks
 addVertexButton.addEventListener('click', () => {
-    mode = 'add';
-    canvas.style.cursor = 'crosshair';
+    setMode(mode === 'add' ? null : 'add'); // Toggle add mode
 });
 deleteVertexButton.addEventListener('click', () => {
-    mode = 'delete';
-    canvas.style.cursor = 'not-allowed';
+    setMode(mode === 'delete' ? null : 'delete'); // Toggle delete mode
 });
 
 // Add event listener to the canvas for adding/deleting vertices
@@ -27,7 +45,7 @@ canvas.addEventListener('click', (event) => {
     if (mode === 'add') {
         createVertex(x, y);
     } else if (mode === 'delete') {
-        deleteVertex(x, y);
+        deleteVertex(event.clientX, event.clientY);
     }
 });
 
@@ -48,8 +66,8 @@ function createVertex(x, y) {
 }
 
 // Function to delete a vertex based on click position
-function deleteVertex(x, y) {
-    const element = document.elementFromPoint(event.clientX, event.clientY);
+function deleteVertex(clientX, clientY) {
+    const element = document.elementFromPoint(clientX, clientY);
     if (element && element.classList.contains('vertex')) {
         canvas.removeChild(element);
     }

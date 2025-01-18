@@ -24,6 +24,8 @@ p {
 
 /* styles.css */
 
+/* styles.css */
+
 /* General reset */
 body, html {
     margin: 0;
@@ -39,6 +41,23 @@ body, html {
     border-bottom: 1px solid #ddd;
     display: flex;
     gap: 10px;
+}
+
+/* Button styles */
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    background-color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button.active {
+    background-color: #ddd;
+    border-color: #999;
+    font-weight: bold;
 }
 
 /* Canvas area */
