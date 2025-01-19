@@ -442,6 +442,26 @@ function makeDraggable(vertex) {
         isDragging = false;
         document.body.style.cursor = 'default';
     });
+    vertex.element.addEventListener('touchstart', (event) => {
+        const touch = event.touches[0]; // Get the first touch point
+        isDragging = true;
+        const rect = vertex.element.getBoundingClientRect();
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+    });
+    document.addEventListener('touchmove', (event) => {
+        if (isDragging) {
+            const touch = event.touches[0]; // Get the first touch point
+            const canvasRect = canvas.getBoundingClientRect();
+            const x = touch.clientX - canvasRect.left - offsetX;
+            const y = touch.clientY - canvasRect.top - offsetY;
+            updateEdgesForVertex(touch);
+        }
+    });
+
+    document.addEventListener('touchend', () => {
+        isDragging = false;
+    });
 }
 
 // Function to update edges connected to a vertex
