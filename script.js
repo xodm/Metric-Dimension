@@ -193,46 +193,37 @@ function removeEdgesForVertex(vertex) {
 
 // Function to update all vertex labels and adjust edges
 function updateVertexLabels() {
+    const idMapping = {};
+
     vertices.forEach((vertex, index) => {
-        vertex.dataset.id = index + 1; // Update ID
-        vertex.textContent = `v${formatSubscript(index + 1)}`; // Update label
+        const oldId = vertex.dataset.id; // Get old ID
+        const newId = (index + 1).toString(); // Calculate new ID
+        idMapping[oldId] = newId; // Map old ID to new ID
+        vertex.dataset.id = newId; // Update the vertex ID
+        vertex.textContent = `v${formatSubscript(newId)}`; // Update the label
     });
+
     vertexCount = vertices.length; // Update vertex count
-    updateEdgesForVertexLabels(); // Adjust edges for new IDs
+    updateEdgesForVertexLabels(idMapping); // Adjust edges for new IDs
 }
 
 // Function to update edges after vertex labels are reassigned
-function updateEdgesForVertexLabels() {
+function updateEdgesForVertexLabels(idMapping) {
     const updatedEdges = {};
 
     Object.keys(edges).forEach((key) => {
         const [oldId1, oldId2] = key.split('-');
-        const vertex1 = vertices.find((v) => v.dataset.id === oldId1);
-        const vertex2 = vertices.find((v) => v.dataset.id === oldId2);
+        const newId1 = idMapping[oldId1];
+        const newId2 = idMapping[oldId2];
 
-        if (vertex1 && vertex2) {
-            // Get new IDs after relabeling
-            const newId1 = vertex1.dataset.id;
-            const newId2 = vertex2.dataset.id;
-
-            // Generate a new key for the edge
+        if (newId1 && newId2) {
             const newKey = newId1 < newId2 ? `${newId1}-${newId2}` : `${newId2}-${newId1}`;
-            updatedEdges[newKey] = edges[key]; // Move the edge to the new key
-
-            // Update edge positions
-            updateEdgePosition(vertex1, vertex2, edges[key]);
-        }
-
-        // Remove edges referencing deleted vertices
-        if (!vertex1 || !vertex2) {
-            canvas.removeChild(edges[key]);
-        }
-    });
-
-    // Replace old edges with updated edges
-    Object.keys(edges).forEach((key) => {
-        if (!updatedEdges[key]) {
-            delete edges[key];
+            updatedEdges[newKey] = edges[key];
+            const vertex1 = vertices.find((v) => v.dataset.id === newId1);
+            const vertex2 = vertices.find((v) => v.dataset.id === newId2);
+            if (vertex1 && vertex2) {
+                updateEdgePosition(vertex1, vertex2, edges[key]);
+            }
         }
     });
 
