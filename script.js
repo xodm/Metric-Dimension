@@ -96,7 +96,7 @@ function deleteVertex(clientX, clientY) {
             removeEdgesForVertex(element); // Remove edges connected to the vertex
             vertices.splice(index, 1); // Remove from array
             canvas.removeChild(element); // Remove from DOM
-            updateVertexLabels(); // Update all labels and edges
+            updateVertexLabelsAndEdges(); // Update all labels and adjust edges
         }
     }
 }
@@ -159,26 +159,6 @@ function createEdge(vertex1, vertex2) {
     canvas.insertBefore(edge, canvas.firstChild); // Insert behind vertices
 }
 
-// Function to delete an edge based on click position
-function deleteEdge(clientX, clientY) {
-    const element = document.elementFromPoint(clientX, clientY);
-    if (element && element.classList.contains('edge')) {
-        const edgeKey = Object.keys(edges).find((key) => edges[key] === element);
-        if (edgeKey) {
-            canvas.removeChild(element);
-            delete edges[edgeKey]; // Remove the edge from storage
-        }
-    }
-}
-
-// Function to clear the selected vertex highlight
-function clearSelectedVertex() {
-    if (selectedVertex) {
-        selectedVertex.classList.remove('highlight');
-        selectedVertex = null;
-    }
-}
-
 // Function to remove edges connected to a vertex
 function removeEdgesForVertex(vertex) {
     const vertexId = vertex.dataset.id;
@@ -192,7 +172,7 @@ function removeEdgesForVertex(vertex) {
 }
 
 // Function to update all vertex labels and adjust edges
-function updateVertexLabels() {
+function updateVertexLabelsAndEdges() {
     const idMapping = {};
 
     // Map old vertex IDs to new IDs
@@ -205,11 +185,11 @@ function updateVertexLabels() {
     });
 
     vertexCount = vertices.length; // Update vertex count
-    updateEdgesForVertexLabels(idMapping); // Adjust edges for new IDs
+    adjustEdgesForNewVertexIDs(idMapping); // Adjust edges for new IDs
 }
 
-// Function to update edges after vertex labels are reassigned
-function updateEdgesForVertexLabels(idMapping) {
+// Function to adjust edges for new vertex IDs after relabeling
+function adjustEdgesForNewVertexIDs(idMapping) {
     const updatedEdges = {};
 
     Object.keys(edges).forEach((key) => {
@@ -220,31 +200,23 @@ function updateEdgesForVertexLabels(idMapping) {
         if (newId1 && newId2) {
             const newKey = newId1 < newId2 ? `${newId1}-${newId2}` : `${newId2}-${newId1}`;
             updatedEdges[newKey] = edges[key];
+
             const vertex1 = vertices.find((v) => v.dataset.id === newId1);
             const vertex2 = vertices.find((v) => v.dataset.id === newId2);
+
             if (vertex1 && vertex2) {
                 updateEdgePosition(vertex1, vertex2, edges[key]);
             }
         }
     });
 
+    Object.keys(edges).forEach((key) => {
+        if (!updatedEdges[key]) {
+            canvas.removeChild(edges[key]);
+        }
+    });
+
     Object.assign(edges, updatedEdges);
-}
-
-// Function to update the position of an edge between two vertices
-function updateEdgePosition(vertex1, vertex2, edge) {
-    const x1 = parseInt(vertex1.style.left) + 20; // Center of vertex1
-    const y1 = parseInt(vertex1.style.top) + 20;
-    const x2 = parseInt(vertex2.style.left) + 20; // Center of vertex2
-    const y2 = parseInt(vertex2.style.top) + 20;
-
-    const length = Math.hypot(x2 - x1, y2 - y1);
-    const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
-
-    edge.style.width = `${length}px`;
-    edge.style.transform = `rotate(${angle}deg)`;
-    edge.style.left = `${x1}px`;
-    edge.style.top = `${y1}px`;
 }
 
 // Function to format subscripts using Unicode
