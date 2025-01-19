@@ -96,7 +96,7 @@ function deleteVertex(clientX, clientY) {
             removeEdgesForVertex(element); // Remove edges connected to the vertex
             vertices.splice(index, 1); // Remove from array
             canvas.removeChild(element); // Remove from DOM
-            updateVertexLabels(); // Update all labels
+            updateVertexLabels(); // Update all labels and edges
         }
     }
 }
@@ -195,6 +195,7 @@ function removeEdgesForVertex(vertex) {
 function updateVertexLabels() {
     const idMapping = {};
 
+    // Map old vertex IDs to new IDs
     vertices.forEach((vertex, index) => {
         const oldId = vertex.dataset.id; // Get old ID
         const newId = (index + 1).toString(); // Calculate new ID
