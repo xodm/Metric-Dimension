@@ -191,13 +191,68 @@ function removeEdgesForVertex(vertex) {
     });
 }
 
-// Function to update all vertex labels
+// Function to update all vertex labels and adjust edges
 function updateVertexLabels() {
     vertices.forEach((vertex, index) => {
         vertex.dataset.id = index + 1; // Update ID
         vertex.textContent = `v${formatSubscript(index + 1)}`; // Update label
     });
     vertexCount = vertices.length; // Update vertex count
+    updateEdgesForVertexLabels(); // Adjust edges for new IDs
+}
+
+// Function to update edges after vertex labels are reassigned
+function updateEdgesForVertexLabels() {
+    const updatedEdges = {};
+
+    Object.keys(edges).forEach((key) => {
+        const [oldId1, oldId2] = key.split('-');
+        const vertex1 = vertices.find((v) => v.dataset.id === oldId1);
+        const vertex2 = vertices.find((v) => v.dataset.id === oldId2);
+
+        if (vertex1 && vertex2) {
+            // Get new IDs after relabeling
+            const newId1 = vertex1.dataset.id;
+            const newId2 = vertex2.dataset.id;
+
+            // Generate a new key for the edge
+            const newKey = newId1 < newId2 ? `${newId1}-${newId2}` : `${newId2}-${newId1}`;
+            updatedEdges[newKey] = edges[key]; // Move the edge to the new key
+
+            // Update edge positions
+            updateEdgePosition(vertex1, vertex2, edges[key]);
+        }
+
+        // Remove edges referencing deleted vertices
+        if (!vertex1 || !vertex2) {
+            canvas.removeChild(edges[key]);
+        }
+    });
+
+    // Replace old edges with updated edges
+    Object.keys(edges).forEach((key) => {
+        if (!updatedEdges[key]) {
+            delete edges[key];
+        }
+    });
+
+    Object.assign(edges, updatedEdges);
+}
+
+// Function to update the position of an edge between two vertices
+function updateEdgePosition(vertex1, vertex2, edge) {
+    const x1 = parseInt(vertex1.style.left) + 20; // Center of vertex1
+    const y1 = parseInt(vertex1.style.top) + 20;
+    const x2 = parseInt(vertex2.style.left) + 20; // Center of vertex2
+    const y2 = parseInt(vertex2.style.top) + 20;
+
+    const length = Math.hypot(x2 - x1, y2 - y1);
+    const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+
+    edge.style.width = `${length}px`;
+    edge.style.transform = `rotate(${angle}deg)`;
+    edge.style.left = `${x1}px`;
+    edge.style.top = `${y1}px`;
 }
 
 // Function to format subscripts using Unicode
