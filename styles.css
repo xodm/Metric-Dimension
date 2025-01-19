@@ -85,3 +85,12 @@ button.active {
     user-select: none;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
 }
+/* Edge styling */
+.edge {
+    position: absolute;
+    height: 3px;
+    background-color: black;
+    transform-origin: 0 50%; /* Rotate around the starting point */
+    z-index: 1;
+}
+
