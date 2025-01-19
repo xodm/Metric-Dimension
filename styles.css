@@ -81,6 +81,7 @@ button.active {
     font-size: 16px;
     font-weight: bold;
     color: black;
+    z-index: 2;
     cursor: pointer;
     user-select: none;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
@@ -96,4 +97,20 @@ button.active {
     cursor: pointer;
 }
 
+/* Edge styling */no 
+.edge {
+    position: absolute;
+    height: 3px;
+    background-color: black;
+    transform-origin: 0 50%; /* Rotate around the starting point */
+    z-index: 1;
+    cursor: pointer;
+}
+
+/* Highlighted vertex */
+.vertex.highlight {
+    box-shadow: 0 0 15px rgba(0, 128, 255, 0.8);
+    border-color: #0078ff;
+    z-index: 3;
+}
 

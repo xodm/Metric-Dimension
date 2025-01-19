@@ -17,7 +17,7 @@ function setMode(newMode) {
 
     // Reset edge selection if switching modes
     if (mode !== 'edge') {
-        selectedVertex = null;
+        clearSelectedVertex(); // Clear any selected vertex
     }
 
     // Update button styles to reflect active mode
@@ -110,19 +110,17 @@ function handleEdgeCreation(clientX, clientY) {
         if (selectedVertex === null) {
             // First vertex selected
             selectedVertex = element;
-            element.classList.add('selected'); // Highlight the selected vertex
+            element.classList.add('highlight'); // Add highlight to selected vertex
         } else {
             // Second vertex selected
             if (selectedVertex !== element) {
                 createEdge(selectedVertex, element);
             }
-            selectedVertex.classList.remove('selected'); // Remove highlight
-            selectedVertex = null; // Reset selection
+            clearSelectedVertex(); // Clear the selection after creating an edge
         }
     } else if (selectedVertex) {
         // Cancel edge creation if clicking outside
-        selectedVertex.classList.remove('selected'); // Remove highlight
-        selectedVertex = null;
+        clearSelectedVertex();
     }
 }
 
@@ -158,7 +156,7 @@ function createEdge(vertex1, vertex2) {
 
     // Store the edge
     edges[edgeKey] = edge;
-    canvas.appendChild(edge);
+    canvas.insertBefore(edge, canvas.firstChild); // Insert behind vertices
 }
 
 // Function to delete an edge based on click position
@@ -170,6 +168,14 @@ function deleteEdge(clientX, clientY) {
             canvas.removeChild(element);
             delete edges[edgeKey]; // Remove the edge from storage
         }
+    }
+}
+
+// Function to clear the selected vertex highlight
+function clearSelectedVertex() {
+    if (selectedVertex) {
+        selectedVertex.classList.remove('highlight');
+        selectedVertex = null;
     }
 }
 
