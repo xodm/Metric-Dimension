@@ -109,7 +109,7 @@ button.active {
 
 /* Highlighted vertex */
 .vertex.highlight {
-    box-shadow: 0 0 15px rgba(0, 128, 255, 0.8);
+    box-shadow: 0 0 15px rgba(136, 5, 251, 0.8);
     border-color: #0078ff;
     z-index: 3;
 }
