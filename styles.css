@@ -1,70 +1,60 @@
-/* styles.css */
-
-/* Set the cream background and ensure the body takes full height */
 body {
-    margin: 0; /* Remove default margins */
-    padding: 0;
-    background-color: #f5f5dc; /* Cream color */
-    color: #333; /* Dark text for good contrast */
-    font-family: Arial, sans-serif; /* Set a clean font */
-    display: flex;
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-    min-height: 100vh; /* Ensure body fills the viewport height */
-    text-align: center; /* Center text */
-}
-
-h1 {
-    font-size: 2.5rem; /* Responsive heading size */
-}
-
-p {
-    font-size: 1.2rem; /* Slightly larger paragraph text */
-}
-
-/* styles.css */
-
-/* General reset */
-body, html {
     margin: 0;
     padding: 0;
-    height: 100%;
-    font-family: Arial, sans-serif;
+    background-color: #fff5e4; /* Light cream background */
+    font-family: 'Arial', sans-serif;
 }
 
-/* Toolbar styling */
-#toolbar {
-    background-color: #f4f4f4;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    gap: 10px;
-}
-
-/* Button styles */
-button {
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    border: 2px solid #ccc;
-    background-color: white;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-button.active {
-    background-color: #ddd;
-    border-color: #999;
-    font-weight: bold;
-}
-
-/* Canvas area */
 #canvas {
     position: relative;
-    width: 100%;
-    height: calc(100% - 50px); /* Subtract toolbar height */
-    background-color: #faf3e0; /* Subtle cream color */
-    overflow: hidden;
+    width: 80%;
+    height: 80vh;
+    margin: 0 auto;
+    border: 3px dashed #ff9999; /* Light red pastel border */
+    border-radius: 10px;
+    background-color: #fffaf3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    border: none;
+    border-radius: 20px;
+    padding: 10px 15px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    color: white;
+    background-color: #ffcccc; /* Light red */
+}
+
+button:hover {
+    background-color: #ff9999; /* Darker red */
+}
+
+button:active,
+button.active {
+    background-color: #ff6666; /* Even darker red */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Display box for the resolving set */
+#resolving-set-display {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffcccc; /* Light pastel red */
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #800000; /* Darker red text */
+    visibility: hidden;
+    z-index: 100;
 }
 
 /* Vertex styling */
@@ -72,45 +62,54 @@ button.active {
     position: absolute;
     width: 40px;
     height: 40px;
-    border: 3px solid black;
-    border-radius: 50%;
     background-color: white;
+    border: 2px solid black;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.vertex:hover {
+    transform: scale(1.1);
+}
+
+.edge {
+    position: absolute;
+    height: 2px;
+    background-color: black;
+    transform-origin: 0 0;
+    z-index: 0;
+}
+
+.highlight {
+    border-color: red;
+}
+
+.resolve {
+    background-color: lightblue;
+}
+
+/* Distance vector styling */
+.distance-label {
+    position: absolute;
+    font-size: 12px;
     font-weight: bold;
     color: black;
-    z-index: 2;
-    cursor: pointer;
-    user-select: none;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    padding: 2px 5px;
+    pointer-events: none;
+    white-space: nowrap;
 }
-
-/* Edge styling */
-.edge {
+.word-a {
+    font-size: 1px;
+    color: red;
     position: absolute;
-    height: 3px;
-    background-color: black;
-    transform-origin: 0 50%; /* Rotate around the starting point */
-    z-index: 1;
-    cursor: pointer;
-}
-
-/* Edge styling */no 
-.edge {
-    position: absolute;
-    height: 3px;
-    background-color: black;
-    transform-origin: 0 50%; /* Rotate around the starting point */
-    z-index: 1;
-    cursor: pointer;
-}
-
-/* Highlighted vertex */
-.vertex.highlight {
-    box-shadow: 0 0 15px rgba(251, 5, 5, 0.8);
-    border-color: #0078ff;
-    z-index: 3;
+    z-index: 9999;
+    pointer-events: none; /* Avoid interaction */
 }
 
