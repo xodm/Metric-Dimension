@@ -1,4 +1,4 @@
-let mode = null; // Current mode: 'add', 'delete', or 'edge'
+let mode = null; // Current mode: 'add', 'delete', 'edge', or 'delete-edge'
 let vertexCount = 0; // Counter for labeling vertices
 const vertices = []; // Array to store all vertices
 const edges = {}; // Object to track edges (avoid multi-edges)
@@ -9,6 +9,7 @@ const canvas = document.getElementById('canvas');
 const addVertexButton = document.getElementById('add-vertex');
 const deleteVertexButton = document.getElementById('delete-vertex');
 const addEdgeButton = document.getElementById('add-edge');
+const deleteEdgeButton = document.getElementById('delete-edge');
 
 // Function to handle button toggling
 function setMode(newMode) {
@@ -23,6 +24,7 @@ function setMode(newMode) {
     addVertexButton.classList.toggle('active', mode === 'add');
     deleteVertexButton.classList.toggle('active', mode === 'delete');
     addEdgeButton.classList.toggle('active', mode === 'edge');
+    deleteEdgeButton.classList.toggle('active', mode === 'delete-edge');
 
     // Update cursor style
     canvas.style.cursor =
@@ -31,6 +33,8 @@ function setMode(newMode) {
             : mode === 'delete'
             ? 'not-allowed'
             : mode === 'edge'
+            ? 'pointer'
+            : mode === 'delete-edge'
             ? 'pointer'
             : 'default';
 }
@@ -45,6 +49,9 @@ deleteVertexButton.addEventListener('click', () => {
 addEdgeButton.addEventListener('click', () => {
     setMode(mode === 'edge' ? null : 'edge'); // Toggle edge mode
 });
+deleteEdgeButton.addEventListener('click', () => {
+    setMode(mode === 'delete-edge' ? null : 'delete-edge'); // Toggle delete edge mode
+});
 
 // Add event listener to the canvas for adding/deleting vertices and edges
 canvas.addEventListener('click', (event) => {
@@ -58,6 +65,8 @@ canvas.addEventListener('click', (event) => {
         deleteVertex(event.clientX, event.clientY);
     } else if (mode === 'edge') {
         handleEdgeCreation(event.clientX, event.clientY);
+    } else if (mode === 'delete-edge') {
+        deleteEdge(event.clientX, event.clientY);
     }
 });
 
@@ -150,6 +159,18 @@ function createEdge(vertex1, vertex2) {
     // Store the edge
     edges[edgeKey] = edge;
     canvas.appendChild(edge);
+}
+
+// Function to delete an edge based on click position
+function deleteEdge(clientX, clientY) {
+    const element = document.elementFromPoint(clientX, clientY);
+    if (element && element.classList.contains('edge')) {
+        const edgeKey = Object.keys(edges).find((key) => edges[key] === element);
+        if (edgeKey) {
+            canvas.removeChild(element);
+            delete edges[edgeKey]; // Remove the edge from storage
+        }
+    }
 }
 
 // Function to remove edges connected to a vertex
